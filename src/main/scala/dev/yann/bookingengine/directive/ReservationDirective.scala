@@ -1,11 +1,8 @@
-package dev.yann.bookingengine.reservation
+package dev.yann.bookingengine.directive
 
 import akka.http.scaladsl.server.Directive0
 import akka.http.scaladsl.server.Directives.validate
-import dev.yann.bookingengine.reservation.ReservationDTO.AddReservation
-
-import ReservationDTO.AddReservation
-import dev.yann.bookingengine.room.RoomDTO.AddRoom
+import dev.yann.bookingengine.dto.ReservationDTO.AddReservation
 
 object ReservationDirective:
 
@@ -20,7 +17,7 @@ object ReservationDirective:
         )
       else if !checkin.isBefore(checkout) then
         (false, "Checkin must be before checkout")
-      else if add.clientCpf.matches("\\d{11}") then
+      else if !add.clientCpf.matches("^\\d{11}$") then
         (false, "CPF must consist of 11 digits only")
       else (true, "")
     validate(isValid, message)

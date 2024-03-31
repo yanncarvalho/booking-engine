@@ -1,14 +1,13 @@
-package dev.yann.bookingengine.reservation
+package dev.yann.bookingengine.model
 
-import slick.jdbc.PostgresProfile.api.*
-import slick.lifted.TableQuery
-import spray.json.DefaultJsonProtocol.*
+import dev.yann.bookingengine.extension.MarshallUnmarshallExtension.given
+import dev.yann.bookingengine.model.Reservation
+import dev.yann.bookingengine.setting.ApplicationConfig.dbSchema
+import slick.jdbc.PostgresProfile.api.{Table, TableQuery, Tag, given}
+import spray.json.DefaultJsonProtocol.{StringJsonFormat, jsonFormat7, optionFormat}
 import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 
 import java.time.LocalDateTime
-import dev.yann.bookingengine.extension.JsonFormatExtension.given
-import dev.yann.bookingengine.setting.ApplicationConfig.dbSchema
-
 import java.util.UUID
 
 final case class Reservation(

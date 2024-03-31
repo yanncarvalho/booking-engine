@@ -7,23 +7,31 @@ lazy val root = (project in file("."))
     name := "BookingEngine"
   )
 
-resolvers += "Akka library repository".at("https://repo.akka.io/maven")
-val AkkaVersion     = "2.9.0"
-val AkkaHttpVersion = "10.6.0"
+val AkkaVersion     = "2.8.5"
+val AkkaHttpVersion = "10.5.3"
+val SlickVersion    = "3.5.0"
+val FlywayVersion   = "10.10.0"
+val PostgresVersion = "42.7.2"
 
-libraryDependencies ++= Seq(
-  "com.typesafe.akka"  %% "akka-http-spray-json"       % AkkaHttpVersion,
-  "com.typesafe.akka"  %% "akka-actor"                 % AkkaVersion,
-  "com.typesafe.akka"  %% "akka-stream"                % AkkaVersion,
-  "com.typesafe.akka"  %% "akka-http"                  % AkkaHttpVersion,
-  "org.scalatest"      %% "scalatest"                  % "3.2.17"  % "test",
-  "org.postgresql"      % "postgresql"                 % "42.7.3",
-  "com.typesafe.slick" %% "slick"                      % "3.5.0",
-  "com.typesafe.slick" %% "slick-hikaricp"             % "3.5.0",
-  "com.typesafe.slick" %% "slick-codegen"              % "3.5.0",
-  "org.flywaydb"        % "flyway-core"                % "10.10.0",
-  "org.slf4j"           % "slf4j-api"                  % "2.0.12",
-  "ch.qos.logback"      % "logback-classic"            % "1.5.3",
-  "com.typesafe"        % "config"                     % "1.4.3",
-  "org.flywaydb"        % "flyway-database-postgresql" % "10.10.0" % "runtime"
+val logAndConfigDependencies = Seq(
+  "com.typesafe"   % "config"          % "1.4.3",
+  "org.slf4j"      % "slf4j-api"       % "2.0.9",
+  "ch.qos.logback" % "logback-classic" % "1.4.14"
 )
+
+val akkaDependencies = Seq(
+  "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
+  "com.typesafe.akka" %% "akka-actor"           % AkkaVersion,
+  "com.typesafe.akka" %% "akka-stream"          % AkkaVersion,
+  "com.typesafe.akka" %% "akka-http"            % AkkaHttpVersion
+)
+
+val databaseDependencies = Seq(
+  "com.typesafe.slick" %% "slick"          % SlickVersion,
+  "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
+  "org.flywaydb"        % "flyway-core"    % FlywayVersion,
+    "org.postgresql"      % "postgresql"     % PostgresVersion,
+  "org.flywaydb" % "flyway-database-postgresql" % FlywayVersion % "runtime"
+)
+
+libraryDependencies ++= logAndConfigDependencies ++ akkaDependencies ++ databaseDependencies

@@ -1,18 +1,16 @@
-package dev.yann.bookingengine.reservation
+package dev.yann.bookingengine.repository
 
-import dev.yann.bookingengine.reservation.ReservationDTO.AddReservation
+import dev.yann.bookingengine.dto.ReservationDTO.AddReservation
+import dev.yann.bookingengine.model.{Reservation, reservationTable, roomTable}
+import dev.yann.bookingengine.setting.Database
 import slick.lifted.CanBeQueryCondition
 
 import java.time.{LocalDate, LocalDateTime}
+import java.util.UUID
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.Future
-import ReservationDTO.AddReservation
-import dev.yann.bookingengine.setting.Database
-import dev.yann.bookingengine.room.roomTable
 
-import java.util.UUID
-
-object ReservationRepository:
+class ReservationRepository:
 
   private val db = Database.db
 
@@ -25,11 +23,11 @@ object ReservationRepository:
     val currDay = date.atTime(23, 59, 59)
 
     reservationTable.filter { e =>
-      e.checkin.isDefined && (e.checkout.isEmpty || e.checkout <= currDay)
+      e.checkin.isDefined && (e.checkout.isEmpty || e.checkout >= currDay)
     }.result
   }
 
-  def add(book: AddReservation): Future[Option[Reservation]] = db.run {
+  def add(book: AddReservation): Future[Reservation] = db.run {
 
     val checkout = book.checkout.getOrElse(book.estimatedCheckout.get)
     val checkin  = book.checkin.getOrElse(book.estimatedCheckin.get)
@@ -48,13 +46,10 @@ object ReservationRepository:
         case Nil =>
           roomTable.filter(_.id === book.roomId).result.headOption.flatMap {
             case Some(_) =>
-              val newReservation = book.toReservation
-              (reservationTable returning reservationTable)
-                .insertOrUpdate(newReservation)
-                .map(_ => Option(newReservation))
-            case None => DBIO.successful(Option.empty[Reservation])
+              reservationTable returning reservationTable += book.toReservation
+            case None => DBIO.successful(null)
           }
-        case _ => DBIO.successful(Option.empty[Reservation])
+        case _ => DBIO.successful(null)
       }
   }
 

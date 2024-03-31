@@ -12,8 +12,8 @@ object ApplicationConfig:
   lazy val httpHost: String = httpConfig.getString("interface")
   lazy val httpPort: Int = httpConfig.getInt("port")
 
-  lazy val dateFormat: String = appConfig.getString("defaultDateFormat")
-  lazy val dateTimeFormat: String = appConfig.getString("defaultDateTimeFormat")
+  lazy val localDateFormat: String = appConfig.getString("defaultDateFormat")
+  lazy val localDateTimeFormat: String = appConfig.getString("defaultDateTimeFormat")
 
   lazy val dbSchema: String = config.getString("database.dbSchema")
   lazy val serverName: String = slickConfig.getString("serverName")
