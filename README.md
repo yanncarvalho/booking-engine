@@ -2,7 +2,7 @@
 
 ![Scala](https://img.shields.io/badge/scala-%23DC322F.svg?style=for-the-badge&logo=scala&logoColor=white)
  
-A simple Book engine using Scala, Akka Http and database PostgresSQL with migration using flyway
+A simple booking engine using Scala, Akka Http and database PostgresSQL with migration using flyway
 ## Built with ##
 
 - Scala 3.3.1 (Java 21)
